@@ -38,7 +38,7 @@ You can either:
 **OR**  
 - Use GitHub to clone:
   ```bash
-  git clone https://github.com/your-repo-url
+  git clone https://github.com/ClaraChaouat/website-metrics-dashboard.git
 
 cd website-metrics-dashboard
 
