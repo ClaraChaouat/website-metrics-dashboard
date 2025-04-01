@@ -2,6 +2,7 @@
 
 Hey there! This is a modern, responsive dashboard for visualizing marketing metrics like clicks, impressions, conversions, and costs — built with a focus on clarity, accessibility, and interactivity.
 
+
 ---
 
 ## 🧠 What Is This?
@@ -61,6 +62,9 @@ http://localhost:5173
 ### Step 4 – Run the Tests (Optional)
 
 npm test
+
+
+Happy reviewing!
 
 
 
