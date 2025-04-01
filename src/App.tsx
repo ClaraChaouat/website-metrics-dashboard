@@ -84,7 +84,7 @@ function App() {
         <h1 className="text-3xl font-bold mb-4" tabIndex={0}>Website Metrics Dashboard </h1>
 
         {periodLabel && (
-          <p className="text-sm text-gray-600 mb-2">
+          <p className="text-sm text-gray-600 mb-2 font-bold">
             Showing totals for: <strong>{periodLabel}</strong>
           </p>
         )}
