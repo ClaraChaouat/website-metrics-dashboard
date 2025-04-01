@@ -3,7 +3,6 @@ import KeyMetrics from "./components/KeyMetrics";
 import PeriodLabel from "./components/PeriodLabel";
 import ChartsSection from "./components/ChartsSection";
 import DatePicker from "./components/Datepicker";
-import { getClickChartData } from "./helpers/chartData";
 import { getConversionRateChartData } from "./helpers/conversionChart";
 import { getMetricLineChart } from "./helpers/metricChartData";
 import { useQueryMetrics } from "./hooks/useMetrics";
@@ -79,7 +78,7 @@ function App() {
     );
   }, [filteredMetrics]);
 
-  const dailyData = getClickChartData(filteredMetrics);
+  const dailyData = getMetricLineChart(metrics, "clicks");
   const conversionRateData = getConversionRateChartData(filteredMetrics);
   const impressionsChartData = getMetricLineChart(filteredMetrics, "impressions");
   const costChartData = getMetricLineChart(filteredMetrics, "cost");
