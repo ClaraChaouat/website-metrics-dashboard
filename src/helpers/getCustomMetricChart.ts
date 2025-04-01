@@ -2,7 +2,7 @@ import { Metric } from "../types/metrics";
 import { ChartData } from "chart.js";
 import { chartColors } from "../styles/theme";
 
-export const getConversionRateChartData = (
+export const getCustomMetricChart = (
   metrics: Metric[]
 ): ChartData<"line", (number | null)[], unknown> => {
   return {

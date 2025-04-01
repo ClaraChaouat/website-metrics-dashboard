@@ -2,8 +2,9 @@ import { useMemo, useState } from "react";
 import KeyMetrics from "./components/KeyMetrics";
 import PeriodLabel from "./components/PeriodLabel";
 import ChartsSection from "./components/ChartsSection";
+import DashboardLayout from "./components/Layout/DashboardLayout";
 import DatePicker from "./components/Datepicker";
-import { getConversionRateChartData } from "./helpers/conversionChart";
+import { getCustomMetricChart } from "./helpers/getCustomMetricChart";
 import { getMetricLineChart } from "./helpers/metricChartData";
 import { useQueryMetrics } from "./hooks/useMetrics";
 import { Range } from "react-date-range";
@@ -79,7 +80,7 @@ function App() {
   }, [filteredMetrics]);
 
   const dailyData = getMetricLineChart(metrics, "clicks");
-  const conversionRateData = getConversionRateChartData(filteredMetrics);
+  const conversionRateData = getCustomMetricChart(filteredMetrics);
   const impressionsChartData = getMetricLineChart(filteredMetrics, "impressions");
   const costChartData = getMetricLineChart(filteredMetrics, "cost");
 
@@ -120,50 +121,34 @@ function App() {
   }
 
   return (
-    <>
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:p-4"
-      >
-        Skip to main content
-      </a>
+    <DashboardLayout title="Website Metrics Dashboard">
+      <div className="relative mb-8">
+        <p className="text-sm font-bold text-gray-700 mb-2">
+          Select a date range to view metrics:
+        </p>
+        <DatePicker
+          dateRange={dateRange}
+          setDateRange={setDateRange}
+          showPicker={showPicker}
+          setShowPicker={setShowPicker}
+          formattedRange={formattedRange}
+        />
+      </div>
 
-      <main
-        className="min-h-screen bg-gray-100 p-6 font-sans"
-        id="main-content"
-      >
-        <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-20 2xl:px-32 max-w-none">
-          <h1 className="text-4xl font-bold leading-tight mb-6 text-center" >
-            Website Metrics Dashboard
-          </h1>
-          <div className="relative mb-8">
-            <p className="ttext-sm font-bold text-gray-700 mb-2">
-              Select a date range to view metrics:
-            </p>
-            <DatePicker
-              dateRange={dateRange}
-              setDateRange={setDateRange}
-              showPicker={showPicker}
-              setShowPicker={setShowPicker}
-              formattedRange={formattedRange}
-            />
-          </div>
-          <PeriodLabel label={periodLabel} />
-          <KeyMetrics
-            total={total}
-            hoveredMetric={hoveredMetric}
-            setHoveredMetric={setHoveredMetric}
-          />
-          <ChartsSection
-            hoveredMetric={hoveredMetric}
-            dailyData={dailyData}
-            conversionRateData={conversionRateData}
-            impressionsChartData={impressionsChartData}
-            costChartData={costChartData}
-          />
-        </div>
-      </main>
-    </>
+      <PeriodLabel label={periodLabel} />
+      <KeyMetrics
+        total={total}
+        hoveredMetric={hoveredMetric}
+        setHoveredMetric={setHoveredMetric}
+      />
+      <ChartsSection
+        hoveredMetric={hoveredMetric}
+        dailyData={dailyData}
+        conversionRateData={conversionRateData}
+        impressionsChartData={impressionsChartData}
+        costChartData={costChartData}
+      />
+    </DashboardLayout>
   );
 }
 
