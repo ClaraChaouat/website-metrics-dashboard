@@ -3,7 +3,7 @@ import { fetchMetrics } from "../services/metricsService";
 
 
 
-export const useMetrics = () =>
+export const useQueryMetrics = () =>
   useQuery({
     queryKey: ["metrics"],
     queryFn: fetchMetrics,

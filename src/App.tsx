@@ -6,7 +6,7 @@ import DatePicker from "./components/Datepicker";
 import { getClickChartData } from "./helpers/chartData";
 import { getConversionRateChartData } from "./helpers/conversionChart";
 import { getMetricLineChart } from "./helpers/metricChartData";
-import { useMetrics } from "./hooks/useMetrics";
+import { useQueryMetrics } from "./hooks/useMetrics";
 import { Range } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -33,7 +33,7 @@ ChartJS.register(
 );
 
 function App() {
-  const { data: metrics = [], isLoading, isError, error } = useMetrics();
+  const { data: metrics = [], isLoading, isError, error } = useQueryMetrics();
   const [hoveredMetric, setHoveredMetric] = useState<
     "clicks" | "impressions" | "conversions" | "cost" | null
   >(null);
@@ -128,6 +128,7 @@ function App() {
       >
         Skip to main content
       </a>
+
       <main
         className="min-h-screen bg-gray-100 p-6 font-sans"
         id="main-content"
