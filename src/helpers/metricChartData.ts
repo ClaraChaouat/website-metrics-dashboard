@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { ChartData } from "chart.js";
-import { Metric } from "./chartData";
+import { Metric } from "../types/metrics";
 
 export const getMetricLineChart = (
   metrics: Metric[],

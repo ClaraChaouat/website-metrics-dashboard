@@ -33,8 +33,7 @@ export const fetchMetrics = async (): Promise<Metric[]> => {
     return json.data;
   } catch (error) {
     throw new Error(
-      `Metrics fetch failed: ${
-        error instanceof Error ? error.message : "Unknown error"
+      `Metrics fetch failed: ${error instanceof Error ? error.message : "Unknown error"
       }`
     );
   }

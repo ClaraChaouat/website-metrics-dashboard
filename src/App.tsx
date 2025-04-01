@@ -128,7 +128,6 @@ function App() {
       >
         Skip to main content
       </a>
-
       <main
         className="min-h-screen bg-gray-100 p-6 font-sans"
         id="main-content"
@@ -137,22 +136,24 @@ function App() {
           <h1 className="text-4xl font-bold leading-tight mb-6 text-center" >
             Website Metrics Dashboard
           </h1>
-
-          <DatePicker
-            dateRange={dateRange}
-            setDateRange={setDateRange}
-            showPicker={showPicker}
-            setShowPicker={setShowPicker}
-            formattedRange={formattedRange}
-          />
-
+          <div className="relative mb-8">
+            <p className="ttext-sm font-bold text-gray-700 mb-2">
+              Select a date range to view metrics:
+            </p>
+            <DatePicker
+              dateRange={dateRange}
+              setDateRange={setDateRange}
+              showPicker={showPicker}
+              setShowPicker={setShowPicker}
+              formattedRange={formattedRange}
+            />
+          </div>
           <PeriodLabel label={periodLabel} />
           <KeyMetrics
             total={total}
             hoveredMetric={hoveredMetric}
             setHoveredMetric={setHoveredMetric}
           />
-
           <ChartsSection
             hoveredMetric={hoveredMetric}
             dailyData={dailyData}
@@ -160,8 +161,6 @@ function App() {
             impressionsChartData={impressionsChartData}
             costChartData={costChartData}
           />
-
-
         </div>
       </main>
     </>

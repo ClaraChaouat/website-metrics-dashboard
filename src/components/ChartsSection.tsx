@@ -58,8 +58,7 @@ export default function ChartsSection({
                 <div
                     key={title}
                     className={`bg-white p-6 rounded shadow min-h-[300px] ${hoveredMetric === metric ? "ring-4 ring-blue-300 scale-[1.01]" : ""
-                        }`}
-                >
+                        }`}>
                     <h2 className="text-xl font-semibold mb-4">{title}</h2>
                     <Line data={chartMap[dataKey]} />
                 </div>

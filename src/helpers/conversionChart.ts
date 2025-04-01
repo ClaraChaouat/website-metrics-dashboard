@@ -1,5 +1,5 @@
 import { Metric } from "../types/metrics";
-import { ChartData} from "chart.js";
+import { ChartData } from "chart.js";
 
 export const getConversionRateChartData = (metrics: Metric[]): ChartData<"line", (number | null)[], unknown> => {
   return {
