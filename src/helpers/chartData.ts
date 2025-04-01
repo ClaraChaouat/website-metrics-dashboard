@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { ChartData } from "chart.js";
-import { Metric } from "../types/metric";
+import { Metric } from "../types/metrics";
 
 
 

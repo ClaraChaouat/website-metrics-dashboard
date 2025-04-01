@@ -1,4 +1,4 @@
-import { Metric } from "../types/metric";
+import { Metric } from "../types/metrics";
 
 interface MetricsResponse {
   title: string;

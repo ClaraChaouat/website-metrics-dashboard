@@ -6,3 +6,7 @@ export interface Metric {
     conversions: number;
     date: string;
   }
+
+
+
+export type MetricType = "clicks" | "impressions" | "conversions" | "cost";

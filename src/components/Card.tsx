@@ -4,6 +4,7 @@ interface CardProps {
     onHover?: () => void;
     onLeave?: () => void;
     ariaLabel?: string;
+    classname?: string;
 }
 
 const Card = ({ title, value, ariaLabel, onHover, onLeave }: CardProps) => {

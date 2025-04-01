@@ -1,18 +1,17 @@
-import dayjs from "dayjs";
-import { ChartData } from "chart.js";
-import { Metric } from "./chartData";
+import { Metric } from "../types/metrics";
+import { ChartData} from "chart.js";
 
-export const getConversionRateChartData = (metrics: Metric[]): ChartData<"bar"> => ({
-  labels: metrics.map((m) => dayjs(m.timestamp).format("MMM D")),
-  datasets: [
-    {
-      label: "Conversion Rate (%)",
-      data: metrics.map((m) =>
-        m.clicks > 0 ? parseFloat(((m.conversions / m.clicks) * 100).toFixed(2)) : 0
-      ),
-      backgroundColor: "rgba(34,197,94,0.6)",
-      borderColor: "rgba(34,197,94,1)",
-      borderWidth: 1,
-    },
-  ],
-});
+export const getConversionRateChartData = (metrics: Metric[]): ChartData<"line", (number | null)[], unknown> => {
+  return {
+    labels: metrics.map((m) => new Date(m.timestamp).toLocaleDateString()),
+    datasets: [
+      {
+        label: "Conversion Rate (%)",
+        data: metrics.map((m) => (m.impressions ? (m.conversions / m.impressions) * 100 : null)),
+        borderColor: "#10B981",
+        backgroundColor: "#6EE7B7",
+        fill: false,
+      },
+    ],
+  };
+};
