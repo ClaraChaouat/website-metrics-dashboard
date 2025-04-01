@@ -1,14 +1,14 @@
 import { useState } from "react";
-import KeyMetrics from "./components/KeyMetrics";
-import PeriodLabel from "./components/PeriodLabel";
-import ChartsSection from "./components/ChartsSection";
+import KeyMetrics from "./components/metrics/KeyMetrics";
+import PeriodLabel from "./components/metrics/PeriodLabel";
+import ChartsSection from "./components/charts/ChartsSection";
 import DashboardLayout from "./components/Layout/DashboardLayout";
-import DatePicker from "./components/Datepicker";
+import DatePicker from "./components/date/DatePicker";
+import { Metric } from "./types/metrics";
 import { useQueryMetrics } from "./hooks/useMetrics";
 import { useDateRange } from "./hooks/useDateRange";
 import { useFilteredMetrics } from "./hooks/useFilteredMetrics";
 import { useChartData } from "./hooks/useChartData";
-import { Metric } from "./types/metrics";
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import {

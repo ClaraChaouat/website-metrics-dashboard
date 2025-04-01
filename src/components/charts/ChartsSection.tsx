@@ -1,6 +1,6 @@
 import { Line } from "react-chartjs-2";
 import { ChartData, Point } from "chart.js";
-import { MetricType } from "../types/metrics";
+import { MetricType } from "../../types/metrics";
 
 export interface Props {
     hoveredMetric: "clicks" | "impressions" | "conversions" | "cost" | null;
