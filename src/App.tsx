@@ -71,20 +71,20 @@ function App() {
         <section aria-label="Key Metrics Summary" className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-gray-50 rounded shadow mb-8">
           <Card
             title="Impressions"
-            value={total.impressions.toString()}
+            value={total.impressions.toLocaleString()}
             onHover={() => setHoveredMetric("impressions")}
             onLeave={() => setHoveredMetric(null)}
             ariaLabel={`Total Impressions: ${total.impressions.toLocaleString()}`} />
 
           <Card
             title="Clicks"
-            value={total.clicks.toString()}
+            value={total.clicks.toLocaleString()}
             onHover={() => setHoveredMetric("clicks")}
             onLeave={() => setHoveredMetric(null)}
             ariaLabel={`Total clicks: ${total.clicks.toLocaleString()}`} />
           <Card
             title="Conversions"
-            value={total.conversions.toString()}
+            value={total.conversions.toLocaleString()}
             onHover={() => setHoveredMetric("conversions")}
             onLeave={() => setHoveredMetric(null)}
             ariaLabel={`Total conversions: ${total.conversions.toLocaleString()}`}
