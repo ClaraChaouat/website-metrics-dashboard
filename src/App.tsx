@@ -42,12 +42,27 @@ function App() {
     );
   }, [metrics]);
 
+  const periodLabel = useMemo(() => {
+    if (!metrics || metrics.length === 0) return "";
+
+    const sorted = [...metrics].sort((a, b) => {
+      const dateA = new Date(a.timestamp.replace(" ", "T"));
+      const dateB = new Date(b.timestamp.replace(" ", "T"));
+      return dateA.getTime() - dateB.getTime();
+    });
+
+    const startDate = new Date(sorted[0].timestamp.replace(" ", "T")).toLocaleDateString();
+    const endDate = new Date(sorted[sorted.length - 1].timestamp.replace(" ", "T")).toLocaleDateString();
+
+    return `${startDate} – ${endDate}`;
+  }, [metrics]);
+
   if (isLoading) {
     return <div className="p-8 text-lg">Loading metrics...</div>;
   }
 
   if (isError) {
-    return <div className="p-8 text-red-500">⚠️ Failed to load metrics. Please try again.</div>;
+    return <div className="p-8 text-red-500">Failed to load metrics. Please try again.</div>;
   }
 
   const chartData = getClickChartData(metrics);
@@ -67,6 +82,12 @@ function App() {
       </a>
       <main className="w-screen min-h-screen bg-gray-100 p-8 font-sans overflow-x-hidden" id="main-content">
         <h1 className="text-3xl font-bold mb-4" tabIndex={0}>Website Metrics Dashboard </h1>
+
+        {periodLabel && (
+          <p className="text-sm text-gray-600 mb-2">
+            Showing totals for: <strong>{periodLabel}</strong>
+          </p>
+        )}
 
         <section aria-label="Key Metrics Summary" className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-gray-50 rounded shadow mb-8">
           <Card

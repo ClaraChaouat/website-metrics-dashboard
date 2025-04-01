@@ -1,13 +1,8 @@
 import dayjs from "dayjs";
 import { ChartData } from "chart.js";
+import { Metric } from "../types/metric";
 
-export interface Metric {
-  timestamp: string;
-  impressions: number;
-  clicks: number;
-  cost: number;
-  conversions: number;
-}
+
 
 export const getClickChartData = (metrics: Metric[]): ChartData<"line"> => ({
   labels: metrics.map((m) => dayjs(m.timestamp).format("MMM D")),
