@@ -35,9 +35,10 @@ This dashboard helps users visualize how a website is performing using sample da
 
 ### Step 1 – Download 
 
-- Download the `.zip` file and extract it  
+- Download the `.zip` file and extract it,
+- then in your terminal:
 
-cd website-metrics-dashboard
+cd your-unzipped-folder-name
 
 
 ### Step 2 – Install Dependencies
