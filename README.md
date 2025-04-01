@@ -12,7 +12,7 @@ This dashboard helps users visualize how a website is performing using sample da
 - 📈 Line & bar charts for daily metrics
 - 📋 Summary cards for totals
 - ✨ Interactive highlights (hover or keyboard)
-- ♿️ Fully keyboard-accessible and screen reader–friendly
+
 
 
 ---
@@ -31,15 +31,11 @@ This dashboard helps users visualize how a website is performing using sample da
 
 ## 🚀 How to Run the Project
 
-### Step 1 – Download or Clone
+### Step 1 – Download 
 
 You can either:
 
 - Download the `.zip` file and extract it  
-**OR**  
-- Use GitHub to clone:
-  ```bash
-  git clone https://github.com/ClaraChaouat/website-metrics-dashboard.git
 
 cd website-metrics-dashboard
 

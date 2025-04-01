@@ -1,4 +1,4 @@
-import { Metric } from "../hooks/useMetrics";
+import { Metric } from "../types/metric";
 
 interface MetricsResponse {
   title: string;

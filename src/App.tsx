@@ -31,7 +31,7 @@ ChartJS.register(
 );
 
 function App() {
-  const { data: metrics = [], isLoading, isError } = useMetrics();
+  const { data: metrics = [], isLoading, isError, error } = useMetrics();
   const [hoveredMetric, setHoveredMetric] = useState<
     "clicks" | "impressions" | "conversions" | "cost" | null
   >(null);
@@ -113,7 +113,7 @@ function App() {
   if (isError) {
     return (
       <div className="p-8 text-red-500">
-        Failed to load metrics. Please try again.
+        Failed to load metrics. Please try again. {error?.message}
       </div>
     );
   }
