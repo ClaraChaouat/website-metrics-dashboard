@@ -51,9 +51,12 @@ function App() {
 
     if (!metrics || metrics.length === 0 || !startDate || !endDate) return [];
 
+    const adjustedEnd = new Date(endDate);
+    adjustedEnd.setHours(23, 59, 59, 999); // include full end day
+
     return metrics.filter((m) => {
       const timestamp = new Date(m.timestamp.replace(" ", "T"));
-      return timestamp >= startDate && timestamp <= endDate;
+      return timestamp >= startDate && timestamp <= adjustedEnd;
     });
   }, [metrics, dateRange]);
 
@@ -80,19 +83,12 @@ function App() {
   const costChartData = getMetricLineChart(filteredMetrics, "cost");
 
   const periodLabel = useMemo(() => {
-    if (!filteredMetrics.length) return "";
+    const start = dateRange[0].startDate;
+    const end = dateRange[0].endDate;
+    if (!start || !end) return "";
 
-    const sorted = [...filteredMetrics].sort((a, b) => {
-      const dateA = new Date(a.timestamp.replace(" ", "T"));
-      const dateB = new Date(b.timestamp.replace(" ", "T"));
-      return dateA.getTime() - dateB.getTime();
-    });
-
-    const start = dayjs(sorted[0].timestamp.replace(" ", "T"));
-    const end = dayjs(sorted[sorted.length - 1].timestamp.replace(" ", "T"));
-
-    return `${start.format("MMM D, YYYY")} – ${end.format("MMM D, YYYY")}`;
-  }, [filteredMetrics]);
+    return `${dayjs(start).format("MMM D, YYYY")} – ${dayjs(end).format("MMM D, YYYY")}`;
+  }, [dateRange]);
 
   const formattedRange = useMemo(() => {
     const start = dateRange[0].startDate;
