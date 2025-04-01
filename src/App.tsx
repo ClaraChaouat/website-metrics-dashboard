@@ -77,7 +77,7 @@ function App() {
     );
   }, [filteredMetrics]);
 
-  const chartData = getClickChartData(filteredMetrics);
+  const dailyData = getClickChartData(filteredMetrics);
   const conversionRateData = getConversionRateChartData(filteredMetrics);
   const impressionsChartData = getMetricLineChart(filteredMetrics, "impressions");
   const costChartData = getMetricLineChart(filteredMetrics, "cost");
@@ -215,7 +215,7 @@ function App() {
                 }`}
             >
               <h2 className="text-xl font-semibold mb-4">Daily Clicks</h2>
-              <Line data={chartData} />
+              <Line data={dailyData} />
             </div>
 
             <div
