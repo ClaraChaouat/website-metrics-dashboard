@@ -132,7 +132,7 @@ function App() {
         id="main-content"
       >
         <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-20 2xl:px-32 max-w-none">
-          <h1 className="text-3xl font-bold mb-6 text-center" tabIndex={0}>
+          <h1 className="text-3xl font-bold mb-6 text-center" >
             Website Metrics Dashboard
           </h1>
 

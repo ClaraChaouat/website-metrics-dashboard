@@ -11,7 +11,6 @@ const Card = ({ title, value, ariaLabel, onHover, onLeave }: CardProps) => {
         <article
             role="region"
             aria-label={ariaLabel || `${title}: ${value}`}
-            tabIndex={0}
             onFocus={onHover}
             onBlur={onLeave}
             onMouseEnter={onHover}
