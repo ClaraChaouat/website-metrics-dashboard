@@ -35,8 +35,6 @@ This dashboard helps users visualize how a website is performing using sample da
 
 ### Step 1 – Download 
 
-You can either:
-
 - Download the `.zip` file and extract it  
 
 cd website-metrics-dashboard
