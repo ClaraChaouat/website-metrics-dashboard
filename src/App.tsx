@@ -5,6 +5,10 @@ import { getClickChartData } from "./helpers/chartData";
 import { getConversionRateChartData } from "./helpers/conversionChart";
 import { getMetricLineChart } from "./helpers/metricChartData";
 import { useMetrics } from "./hooks/useMetrics";
+import { DateRange, Range } from "react-date-range";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+import dayjs from "dayjs";
 import {
   Chart as ChartJS,
   LineElement,
@@ -16,22 +20,49 @@ import {
   Legend,
 } from "chart.js";
 
-ChartJS.register(LineElement, BarElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend);
-
-
+ChartJS.register(
+  LineElement,
+  BarElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend
+);
 
 function App() {
-
   const { data: metrics = [], isLoading, isError } = useMetrics();
-  const [hoveredMetric, setHoveredMetric] = useState<"clicks" | "impressions" | "conversions" | "cost" | null>(null);
+  const [hoveredMetric, setHoveredMetric] = useState<
+    "clicks" | "impressions" | "conversions" | "cost" | null
+  >(null);
 
+  const [dateRange, setDateRange] = useState<Range[]>([
+    {
+      startDate: new Date("2019-06-24"),
+      endDate: new Date("2019-07-24"),
+      key: "selection",
+    },
+  ]);
+  const [showPicker, setShowPicker] = useState(false);
+
+  const filteredMetrics = useMemo(() => {
+    const startDate = dateRange[0].startDate;
+    const endDate = dateRange[0].endDate;
+
+    if (!metrics || metrics.length === 0 || !startDate || !endDate) return [];
+
+    return metrics.filter((m) => {
+      const timestamp = new Date(m.timestamp.replace(" ", "T"));
+      return timestamp >= startDate && timestamp <= endDate;
+    });
+  }, [metrics, dateRange]);
 
   const total = useMemo(() => {
-    if (!metrics || metrics.length === 0) {
+    if (!filteredMetrics.length) {
       return { clicks: 0, impressions: 0, conversions: 0, cost: 0 };
     }
 
-    return metrics.reduce(
+    return filteredMetrics.reduce(
       (acc, curr) => {
         acc.clicks += curr.clicks;
         acc.impressions += curr.impressions;
@@ -41,36 +72,55 @@ function App() {
       },
       { clicks: 0, impressions: 0, conversions: 0, cost: 0 }
     );
-  }, [metrics]);
+  }, [filteredMetrics]);
+
+  const chartData = getClickChartData(filteredMetrics);
+  const conversionRateData = getConversionRateChartData(filteredMetrics);
+  const impressionsChartData = getMetricLineChart(filteredMetrics, "impressions");
+  const costChartData = getMetricLineChart(filteredMetrics, "cost");
 
   const periodLabel = useMemo(() => {
-    if (!metrics || metrics.length === 0) return "";
+    if (!filteredMetrics.length) return "";
 
-    const sorted = [...metrics].sort((a, b) => {
+    const sorted = [...filteredMetrics].sort((a, b) => {
       const dateA = new Date(a.timestamp.replace(" ", "T"));
       const dateB = new Date(b.timestamp.replace(" ", "T"));
       return dateA.getTime() - dateB.getTime();
     });
 
-    const startDate = new Date(sorted[0].timestamp.replace(" ", "T")).toLocaleDateString();
-    const endDate = new Date(sorted[sorted.length - 1].timestamp.replace(" ", "T")).toLocaleDateString();
+    const start = dayjs(sorted[0].timestamp.replace(" ", "T"));
+    const end = dayjs(sorted[sorted.length - 1].timestamp.replace(" ", "T"));
 
-    return `${startDate} – ${endDate}`;
-  }, [metrics]);
+    return `${start.format("MMM D, YYYY")} – ${end.format("MMM D, YYYY")}`;
+  }, [filteredMetrics]);
+
+  const formattedRange = useMemo(() => {
+    const start = dateRange[0].startDate;
+    const end = dateRange[0].endDate;
+    if (!start || !end) return "Select Date Range";
+
+    return `${start.toLocaleDateString(undefined, {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    })} – ${end.toLocaleDateString(undefined, {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    })}`;
+  }, [dateRange]);
 
   if (isLoading) {
     return <div className="p-8 text-lg">Loading metrics...</div>;
   }
 
   if (isError) {
-    return <div className="p-8 text-red-500">Failed to load metrics. Please try again.</div>;
+    return (
+      <div className="p-8 text-red-500">
+        Failed to load metrics. Please try again.
+      </div>
+    );
   }
-
-  const chartData = getClickChartData(metrics);
-  const conversionRateData = getConversionRateChartData(metrics);
-  const impressionsChartData = getMetricLineChart(metrics, "impressions");
-  const costChartData = getMetricLineChart(metrics, "cost");
-
 
   return (
     <>
@@ -80,74 +130,126 @@ function App() {
       >
         Skip to main content
       </a>
-      <main className="w-screen min-h-screen bg-gray-100 p-8 font-sans overflow-x-hidden" id="main-content">
-        <h1 className="text-3xl font-bold mb-4" tabIndex={0}>Website Metrics Dashboard </h1>
 
-        {periodLabel && (
-          <p className="text-sm text-gray-600 mb-2 font-bold">
-            Showing totals for: <strong>{periodLabel}</strong>
-          </p>
-        )}
+      <main
+        className="min-h-screen bg-gray-100 p-6 font-sans"
+        id="main-content"
+      >
+        <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-20 2xl:px-32 max-w-none">
+          <h1 className="text-3xl font-bold mb-6 text-center" tabIndex={0}>
+            Website Metrics Dashboard
+          </h1>
 
-        <section aria-label="Key Metrics Summary" className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-gray-50 rounded shadow mb-8">
-          <Card
-            title="Total impressions"
-            value={total.impressions.toLocaleString()}
-            onHover={() => setHoveredMetric("impressions")}
-            onLeave={() => setHoveredMetric(null)}
-            ariaLabel={`Total Impressions: ${total.impressions.toLocaleString()}`} />
+          {/* Date Picker */}
+          <div className="relative mb-8">
+            <button
+              onClick={() => setShowPicker((prev) => !prev)}
+              className="border border-gray-300 rounded px-4 py-2 text-sm bg-white shadow hover:shadow-md transition"
+            >
+              📅 {formattedRange}
+            </button>
 
-          <Card
-            title="Total clicks"
-            value={total.clicks.toLocaleString()}
-            onHover={() => setHoveredMetric("clicks")}
-            onLeave={() => setHoveredMetric(null)}
-            ariaLabel={`Total clicks: ${total.clicks.toLocaleString()}`} />
-          <Card
-            title="Total conversions"
-            value={total.conversions.toLocaleString()}
-            onHover={() => setHoveredMetric("conversions")}
-            onLeave={() => setHoveredMetric(null)}
-            ariaLabel={`Total conversions: ${total.conversions.toLocaleString()}`}
-          />
-          <Card
-            title="Total Cost ($)"
-            value={total.cost.toFixed(2)}
-            onHover={() => setHoveredMetric("cost")}
-            onLeave={() => setHoveredMetric(null)}
-            ariaLabel={`Total costs: ${total.cost.toLocaleString()}`} />
-        </section>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className={`bg-white p-6 rounded shadow w-full max-h-[500px] ${hoveredMetric === "clicks" ? "ring-4 ring-blue-300 scale-[1.01]" : ""
-            }`}>
-            <h2 className="text-xl font-semibold mb-4">Daily Clicks</h2>
-            <Line data={chartData} />
+            {showPicker && (
+              <div className="absolute z-10 mt-2">
+                <DateRange
+                  editableDateInputs={true}
+                  onChange={(item) => {
+                    setDateRange([item.selection]);
+                    setShowPicker(false);
+                  }}
+                  moveRangeOnFirstSelection={false}
+                  ranges={dateRange}
+                  maxDate={new Date()}
+                  rangeColors={["#3B82F6"]}
+                />
+              </div>
+            )}
           </div>
 
-          <div className={`bg-white p-6 rounded shadow w-full max-h-[500px] ${hoveredMetric === "conversions" ? "ring-4 ring-blue-300 scale-[1.01]" : ""
-            }`}>
-            <h2 className="text-xl font-semibold mb-4">Daily Conversion Rate (%)</h2>
-            <Bar data={conversionRateData} />
-          </div>
+          {/* Period Label */}
+          {periodLabel && (
+            <p className="text-sm text-gray-600 mb-6 text-center font-medium">
+              Showing totals for:{" "}
+              <span className="font-semibold text-gray-800">
+                {periodLabel}
+              </span>
+            </p>
+          )}
 
-          <div className={`bg-white p-6 rounded shadow w-full max-h-[500px] ${hoveredMetric === "impressions" ? "ring-4 ring-blue-300 scale-[1.01]" : ""
-            }`}>
-            <h2 className="text-xl font-semibold mb-4">Daily Impressions</h2>
-            <Line data={impressionsChartData} />
-          </div>
+          {/* Key Metrics */}
+          <section
+            aria-label="Key Metrics Summary"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 bg-white rounded shadow p-6 mb-8 w-full"
+          >
 
-          <div className={`bg-white p-6 rounded shadow w-full max-h-[500px] ${hoveredMetric === "cost" ? "ring-4 ring-blue-300 scale-[1.01]" : ""
-            }`}>
-            <h2 className="text-xl font-semibold mb-4">Daily Cost ($)</h2>
-            <Line data={costChartData} />
+            <Card
+              title="Total impressions"
+              value={total.impressions.toLocaleString()}
+              onHover={() => setHoveredMetric("impressions")}
+              onLeave={() => setHoveredMetric(null)}
+              ariaLabel={`Total Impressions: ${total.impressions.toLocaleString()}`}
+            />
+            <Card
+              title="Total clicks"
+              value={total.clicks.toLocaleString()}
+              onHover={() => setHoveredMetric("clicks")}
+              onLeave={() => setHoveredMetric(null)}
+              ariaLabel={`Total clicks: ${total.clicks.toLocaleString()}`}
+            />
+            <Card
+              title="Total conversions"
+              value={total.conversions.toLocaleString()}
+              onHover={() => setHoveredMetric("conversions")}
+              onLeave={() => setHoveredMetric(null)}
+              ariaLabel={`Total conversions: ${total.conversions.toLocaleString()}`}
+            />
+            <Card
+              title="Total Cost ($)"
+              value={total.cost.toFixed(2)}
+              onHover={() => setHoveredMetric("cost")}
+              onLeave={() => setHoveredMetric(null)}
+              ariaLabel={`Total costs: ${total.cost.toLocaleString()}`}
+            />
+          </section>
+
+          {/* Charts */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-8 w-full">
+            <div
+              className={`bg-white p-6 rounded shadow  h-full min-h-[300px] ${hoveredMetric === "clicks" ? "ring-4 ring-blue-300 scale-[1.01]" : ""
+                }`}
+            >
+              <h2 className="text-xl font-semibold mb-4">Daily Clicks</h2>
+              <Line data={chartData} />
+            </div>
+
+            <div
+              className={`bg-white p-6 rounded shadow  h-full min-h-[300px] ${hoveredMetric === "conversions" ? "ring-4 ring-blue-300 scale-[1.01]" : ""
+                }`}
+            >
+              <h2 className="text-xl font-semibold mb-4">Daily Conversion Rate (%)</h2>
+              <Bar data={conversionRateData} />
+            </div>
+
+            <div
+              className={`bg-white p-6 rounded shadow  h-full min-h-[300px] ${hoveredMetric === "impressions" ? "ring-4 ring-blue-300 scale-[1.01]" : ""
+                }`}
+            >
+              <h2 className="text-xl font-semibold mb-4">Daily Impressions</h2>
+              <Line data={impressionsChartData} />
+            </div>
+
+            <div
+              className={`bg-white p-6 rounded shadow  h-full min-h-[300px] ${hoveredMetric === "cost" ? "ring-4 ring-blue-300 scale-[1.01]" : ""
+                }`}
+            >
+              <h2 className="text-xl font-semibold mb-4">Daily Cost ($)</h2>
+              <Line data={costChartData} />
+            </div>
           </div>
         </div>
-      </main >
+      </main>
     </>
   );
 }
-
-
 
 export default App;
