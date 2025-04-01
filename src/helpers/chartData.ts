@@ -1,8 +1,7 @@
 import dayjs from "dayjs";
 import { ChartData } from "chart.js";
 import { Metric } from "../types/metrics";
-
-
+import { chartColors } from "../styles/theme";
 
 export const getClickChartData = (metrics: Metric[]): ChartData<"line"> => ({
   labels: metrics.map((m) => dayjs(m.timestamp).format("MMM D")),
@@ -10,8 +9,8 @@ export const getClickChartData = (metrics: Metric[]): ChartData<"line"> => ({
     {
       label: "Clicks",
       data: metrics.map((m) => m.clicks),
-      borderColor: "rgb(59,130,246)",
-      backgroundColor: "rgba(59,130,246,0.5)",
+      borderColor: chartColors.primary.border,
+      backgroundColor: chartColors.primary.background,
     },
   ],
 });
