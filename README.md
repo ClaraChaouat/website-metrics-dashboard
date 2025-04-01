@@ -9,9 +9,11 @@ Hey there! This is a modern, responsive dashboard for visualizing marketing metr
 
 This dashboard helps users visualize how a website is performing using sample data (or an API). It includes:
 
-- 📈 Line & bar charts for daily metrics
+- 📈 Line charts for daily metrics
 - 📋 Summary cards for totals
-- ✨ Interactive highlights (hover or keyboard)
+- ✨ Interactive highlights (when hovering the summary cards)
+- 📅 Date picker you can select date ranges with.
+    Note: The available data is restricted to date range from the dataset provided.
 
 
 
