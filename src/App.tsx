@@ -25,6 +25,7 @@ function App() {
   const { data: metrics = [], isLoading, isError } = useMetrics();
   const [hoveredMetric, setHoveredMetric] = useState<"clicks" | "impressions" | "conversions" | "cost" | null>(null);
 
+
   const total = useMemo(() => {
     if (!metrics || metrics.length === 0) {
       return { clicks: 0, impressions: 0, conversions: 0, cost: 0 };
@@ -70,7 +71,6 @@ function App() {
   const impressionsChartData = getMetricLineChart(metrics, "impressions");
   const costChartData = getMetricLineChart(metrics, "cost");
 
-  console.log("TOTAL:", total);
 
   return (
     <>
